@@ -57,7 +57,7 @@ public:
     
     /////////////////////////////////////////////////////////////////
     /// Constructor used to create the class.
-    MyNetSerialRPi(const unsigned myid);
+    MyNetSerialRPi(int pipi,const unsigned myid);
     
     ~MyNetSerialRPi(){
         pigpio_stop(pi);
@@ -90,6 +90,10 @@ public:
     /*****************************************************************/
     /*PUBLIC: RECEIVE FUNCTIONS                                                */
     /*****************************************************************/
+    int serialDataAvailable(){
+        return serial_data_available(pi,handle);
+    }
+    
     const int receive();
     
     SerialDataRPi* pick(const int id){

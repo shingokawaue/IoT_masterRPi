@@ -1,13 +1,20 @@
-//uint8_t unsigned
+//Arduino LCD library ported to linux on raspberry pi.
+//All unsigned are replaced with unsigned.
 
 //YWROBOT
-#ifndef LiquidCrystal_I2C_h
-#define LiquidCrystal_I2C_h
+#ifndef LiquidCrystal_I2C_RPI_h
+#define LiquidCrystal_I2C_RPI_h
+
+
 
 #include <inttypes.h>
-//#include "Print.h" //change
-//#include <Wire.h> //change
-
+/* original code
+ #include "Print.h" //Do not use for now.
+#include <Wire.h> //Replace with pigpiod library.
+*/
+//modidied
+#include <pigpiod_if2.h>
+//modified end
 // commands
 #define LCD_CLEARDISPLAY 0x01
 #define LCD_RETURNHOME 0x02
@@ -50,14 +57,34 @@
 #define LCD_BACKLIGHT 0x08
 #define LCD_NOBACKLIGHT 0x00
 
+/*original
 #define En B00000100  // Enable bit
 #define Rw B00000010  // Read/Write bit
 #define Rs B00000001  // Register select bit
+ */
+//modified
+#define En 0b00000100  // Enable bit
+#define Rw 0b00000010  // Read/Write bit
+#define Rs 0b00000001  // Register select bit
+//modified end
 
-class LiquidCrystal_I2C : public Print {
+//original//class LiquidCrystal_I2C : public Print {
+class LiquidCrystal_I2CRPi{
 public:
-  LiquidCrystal_I2C(uint8_t lcd_Addr,uint8_t lcd_cols,uint8_t lcd_rows);
-  void begin(uint8_t cols, uint8_t rows, uint8_t charsize = LCD_5x8DOTS );
+        LiquidCrystal_I2CRPi(int pi,unsigned i2c_bus,unsigned lcd_Addr,unsigned i2c_flags,unsigned lcd_cols,unsigned lcd_rows);
+//    LiquidCrystal_I2CRPi(int pi,unsigned i2c_bus,unsigned lcd_Addr,unsigned i2c_flags,unsigned lcd_cols,unsigned lcd_rows)
+//    {
+//      _Addr = lcd_Addr;
+//      _cols = lcd_cols;
+//      _rows = lcd_rows;
+//      _backlightval = LCD_NOBACKLIGHT;
+//        //modidied
+//        _pi = pi;
+//        _i2c_bus = i2c_bus;
+//        _i2c_flags = i2c_flags;
+//        //modified end
+//    }
+  void begin(unsigned cols, unsigned rows, unsigned charsize = LCD_5x8DOTS );
   void clear();
   void home();
   void noDisplay();
@@ -78,14 +105,14 @@ public:
   void backlight();
   void autoscroll();
   void noAutoscroll(); 
-  void createChar(uint8_t, uint8_t[]);
-  void setCursor(uint8_t, uint8_t); 
+  //void createChar(unsigned, unsigned[]);
+  void setCursor(unsigned, unsigned);
 //#if defined(ARDUINO) && ARDUINO >= 100
-//  virtual size_t write(uint8_t);
+//  virtual size_t write(unsigned);
 //#else
-  virtual void write(uint8_t);
+  virtual void write(unsigned);
 //#endif
-  void command(uint8_t);
+  void command(unsigned);
   void init();
 
 ////compatibility API function aliases
@@ -93,36 +120,41 @@ void blink_on();						// alias for blink()
 void blink_off();       					// alias for noBlink()
 void cursor_on();      	 					// alias for cursor()
 void cursor_off();      					// alias for noCursor()
-void setBacklight(uint8_t new_val);				// alias for backlight() and nobacklight()
-void load_custom_character(uint8_t char_num, uint8_t *rows);	// alias for createChar()
-void printstr(const char[]);
+void setBacklight(unsigned new_val);				// alias for backlight() and nobacklight()
+//void load_custom_character(unsigned char_num, unsigned *rows);	// alias for createChar()
+//original//void printstr(const char[]);
 
 ////Unsupported API functions (not implemented in this library)
-uint8_t status();
-void setContrast(uint8_t new_val);
-uint8_t keypad();
+unsigned status();
+void setContrast(unsigned new_val);
+unsigned keypad();
 void setDelay(int,int);
 void on();
 void off();
-uint8_t init_bargraph(uint8_t graphtype);
-void draw_horizontal_graph(uint8_t row, uint8_t column, uint8_t len,  uint8_t pixel_col_end);
-void draw_vertical_graph(uint8_t row, uint8_t column, uint8_t len,  uint8_t pixel_col_end);
+unsigned init_bargraph(unsigned graphtype);
+void draw_horizontal_graph(unsigned row, unsigned column, unsigned len,  unsigned pixel_col_end);
+void draw_vertical_graph(unsigned row, unsigned column, unsigned len,  unsigned pixel_col_end);
 	 
 
 private:
+    //Modified
+    int _pi;
+    unsigned _i2c_bus;
+    unsigned _i2c_flags;
+    //Modified end
   void init_priv();
-  void send(uint8_t, uint8_t);
-  void write4bits(uint8_t);
-  void expanderWrite(uint8_t);
-  void pulseEnable(uint8_t);
-  uint8_t _Addr;
-  uint8_t _displayfunction;
-  uint8_t _displaycontrol;
-  uint8_t _displaymode;
-  uint8_t _numlines;
-  uint8_t _cols;
-  uint8_t _rows;
-  uint8_t _backlightval;
+  void send(unsigned, unsigned);
+  void write4bits(unsigned);
+  void expanderWrite(unsigned);
+  void pulseEnable(unsigned);
+  unsigned _Addr;
+  unsigned _displayfunction;
+  unsigned _displaycontrol;
+  unsigned _displaymode;
+  unsigned _numlines;
+  unsigned _cols;
+  unsigned _rows;
+  unsigned _backlightval;
 };
 
-#endif
+#endif //LiquidCrystal_I2C_RPI_h

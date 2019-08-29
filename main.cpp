@@ -5,13 +5,13 @@
 using namespace std;
 #include <pigpiod_if2.h>
 #include "MyNetSerialRPi.h"
-
+#include "LiquidCrystal_I2CRPi.h"
 #define LED_PIN 5
 #define LED_PIN2 10
-MyNetSerialRPi mynet(MCID_MASTER_RPI);
-int pi;
-unsigned handle;
 
+int pi = pigpio_start(0,0);
+MyNetSerialRPi mynet(pi,MCID_MASTER_RPI);
+LiquidCrystal_I2CRPi lcd(pi,1,0x25,0,16,2);
 //argument :ID of the data array(mydata) to be displayed
 void dataToMe(SerialDataRPi *sd)
 {
@@ -42,18 +42,39 @@ int main()
     set_mode(pi, LED_PIN2, PI_OUTPUT);
     char wc[1];
 
+    
+    lcd.init();
+    lcd.backlight();
+    lcd.setCursor(2, 0);
+    lcd.write('H');
+    lcd.write('e');
+    lcd.write('l');
+    lcd.write('l');
+    lcd.write('o');
+    lcd.write('!');
+    lcd.write('!');
+    lcd.write('W');
+    lcd.write('o');
+    lcd.write('r');
+    lcd.write('l');
+    lcd.write('d');
+    lcd.write('!');
+    lcd.write('!');
+    lcd.write('!');
+    
+    
     while (1)
     {
         //Serial Process----------------------------------
-        if (serial_data_available(pi, handle))
+        if (mynet.serialDataAvailable())
         {
-            if (serial_data_available(pi, handle) < 0)
+            if (mynet.serialDataAvailable() < 0)
             {
                 cout << "serial_data_available returns < 0.check pigpiod." << endl;
             }
             else
             {
-                cout << "serial_data_incoming.." << serial_data_available(pi, handle) << "bytes" << endl;
+                cout << "serial_data_incoming.." << mynet.serialDataAvailable() << "bytes" << endl;
                 mynet.receive();
             }
         }

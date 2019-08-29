@@ -43,15 +43,15 @@ const float MyNetSerialRPi::FLOAT_UNKNOWN = 99999.99f;
 /*****************************************************************/
 /*PUBLIC: INIT FUNCTIONS                                                */
 /*****************************************************************/
-MyNetSerialRPi::MyNetSerialRPi(const unsigned myid):BaseMyNetRPi(myid){
+MyNetSerialRPi::MyNetSerialRPi(const int pipi,const unsigned myid):BaseMyNetRPi(myid){
     for (int i = 0; i < DATA_ELEMENTS_NUM ; i++){
         fixed[i].data = 0;
         fixed[i].len = fixedbitlen(i);
         fixed[i].flag = fixedflag(i);
     }
     updateTime.ui32 = 0;
+    pi = pipi;
     
-    pi = pigpio_start(0,0);
     char ser_tty[] = "/dev/ttyS0";
     handle = serial_open(pi,ser_tty,9600,0);
     if (handle < 0){
