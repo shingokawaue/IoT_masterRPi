@@ -1,3 +1,8 @@
+//based on Arduino Library
+//ported to standard C++ for raspberry pi
+
+//All uint8_t are replased with unsigned.
+
 /*
  Print.cpp - Base class that provides print() and println()
  Copyright (c) 2008 David A. Mellis.  All right reserved.
@@ -31,11 +36,11 @@
 // Public Methods //////////////////////////////////////////////////////////////
 
 /* default implementation: may be overridden */
-size_t Print::write(const uint8_t *buffer, size_t size)
+size_t Print::write(const unsigned *buffer, size_t size)
 {
   size_t n = 0;
   while (size--) {
-    if (write(*buffer++)) n++;
+    if (write(*buffer++)) n++;//理解が怪しい
     else break;
   }
   return n;
@@ -43,18 +48,21 @@ size_t Print::write(const uint8_t *buffer, size_t size)
 
 size_t Print::print(const __FlashStringHelper *ifsh)
 {
+  //reinterpret_cast ポインタ型を他のポインタ型に強制的に変換
+  //安全かどうかは考慮されない。
   PGM_P p = reinterpret_cast<PGM_P>(ifsh);
   size_t n = 0;
   while (1) {
     unsigned char c = pgm_read_byte(p++);
+    //pgm_read_byte : Read a byte from the program space with a 16-bit (near) address.
     if (c == 0) break;
     if (write(c)) n++;
     else break;
   }
-  return n;
+  return n;//書き込んだサイズ
 }
 
-size_t Print::print(const String &s)
+size_t Print::print(const String &s)//String
 {
   return write(s.c_str(), s.length());
 }
@@ -69,17 +77,17 @@ size_t Print::print(char c)
   return write(c);
 }
 
-size_t Print::print(unsigned char b, int base)
+size_t Print::print(unsigned char b, int base)//どういう風に使われるのかわかりません
 {
-  return print((unsigned long) b, base);
+  return print((unsigned long) b, base);//謎キャスト
 }
 
-size_t Print::print(int n, int base)
+size_t Print::print(int n, int base)//どういう風に使われるのかわかりません
 {
   return print((long) n, base);
 }
 
-size_t Print::print(unsigned int n, int base)
+size_t Print::print(unsigned int n, int base)//どういう風に使われるのかわかりません
 {
   return print((unsigned long) n, base);
 }
@@ -200,8 +208,7 @@ size_t Print::println(const Printable& x)
 
 // Private Methods /////////////////////////////////////////////////////////////
 
-size_t Print::printNumber(unsigned long n, uint8_t base)
-{
+size_t Print::printNumber(unsigned long n, unsigned base)
   char buf[8 * sizeof(long) + 1]; // Assumes 8-bit chars plus zero byte.
   char *str = &buf[sizeof(buf) - 1];
 
@@ -210,17 +217,19 @@ size_t Print::printNumber(unsigned long n, uint8_t base)
   // prevent crash if called with base == 1
   if (base < 2) base = 10;
 
-  do {
+  do {//n 31  base 16
     char c = n % base;
     n /= base;
 
     *--str = c < 10 ? c + '0' : c + 'A' - 10;
   } while(n);
-
+//                        F
+  //                 10100 
+//str 00000000 00000000 00000000 00000'2''0''\0'
   return write(str);
 }
 
-size_t Print::printFloat(double number, uint8_t digits) 
+size_t Print::printFloat(double number, unsigned digits) 
 { 
   size_t n = 0;
   
@@ -238,7 +247,7 @@ size_t Print::printFloat(double number, uint8_t digits)
 
   // Round correctly so that print(1.999, 2) prints as "2.00"
   double rounding = 0.5;
-  for (uint8_t i=0; i<digits; ++i)
+  for (unsigned i=0; i<digits; ++i)
     rounding /= 10.0;
   
   number += rounding;

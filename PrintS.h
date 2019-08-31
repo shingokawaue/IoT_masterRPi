@@ -1,3 +1,9 @@
+//based on Arduino Library
+//ported to standard C++ for raspberry pi
+
+//All uint8_t are replased with unsigned.
+
+
 /*
   Print.h - Base class that provides print() and println()
   Copyright (c) 2008 David A. Mellis.  All right reserved.
@@ -38,8 +44,8 @@ class Print
 {
   private:
     int write_error;
-    size_t printNumber(unsigned long, uint8_t);
-    size_t printFloat(double, uint8_t);
+    size_t printNumber(unsigned long, unsigned);
+    size_t printFloat(double, unsigned);
   protected:
     void setWriteError(int err = 1) { write_error = err; }
   public:
@@ -48,14 +54,16 @@ class Print
     int getWriteError() { return write_error; }
     void clearWriteError() { setWriteError(0); }
   
-    virtual size_t write(uint8_t) = 0;
-    size_t write(const char *str) {
+    virtual size_t write(unsigned) = 0;//継承先でオーバーライドしないと使えないよ
+
+    size_t write(const char *str) {//const char 引数に使えるぜオーバーロード
       if (str == NULL) return 0;
-      return write((const uint8_t *)str, strlen(str));
+      return write((const unsigned *)str, strlen(str));
     }
-    virtual size_t write(const uint8_t *buffer, size_t size);
+
+    virtual size_t write(const unsigned *buffer, size_t size);
     size_t write(const char *buffer, size_t size) {
-      return write((const uint8_t *)buffer, size);
+      return write((const unsigned *)buffer, size);
     }
 
     // default to zero, meaning "a single write may block"
