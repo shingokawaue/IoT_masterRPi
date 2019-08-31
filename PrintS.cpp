@@ -208,6 +208,7 @@ size_t Print::println(const Printable& x)
 
 // Private Methods /////////////////////////////////////////////////////////////
 
+//n:some number   base:2進数で表示したいなら２　１６進数なら１６
 size_t Print::printNumber(unsigned long n, unsigned base)
   char buf[8 * sizeof(long) + 1]; // Assumes 8-bit chars plus zero byte.
   char *str = &buf[sizeof(buf) - 1];
@@ -223,9 +224,7 @@ size_t Print::printNumber(unsigned long n, unsigned base)
 
     *--str = c < 10 ? c + '0' : c + 'A' - 10;
   } while(n);
-//                        F
-  //                 10100 
-//str 00000000 00000000 00000000 00000'2''0''\0'
+
   return write(str);
 }
 
@@ -250,12 +249,12 @@ size_t Print::printFloat(double number, unsigned digits)
   for (unsigned i=0; i<digits; ++i)
     rounding /= 10.0;
   
-  number += rounding;
+  number += rounding;//四捨五入
 
   // Extract the integer part of the number and print it
   unsigned long int_part = (unsigned long)number;
   double remainder = number - (double)int_part;
-  n += print(int_part);
+  n += print(int_part);//整数部分を表示
 
   // Print the decimal point, but only if there are digits beyond
   if (digits > 0) {
