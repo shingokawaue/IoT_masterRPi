@@ -7,33 +7,33 @@
 #include "LiquidCrystal_I2CRPi.h"
 #include <inttypes.h>
 
-/*original
- #if defined(ARDUINO) && ARDUINO >= 100
 
-#include "Arduino.h"
+//  #if defined(ARDUINO) && ARDUINO >= 100
 
-#define printIIC(args)    Wire.write(args)
-inline size_t LiquidCrystal_I2CRPi::write(unsigned value) {
+// #include "Arduino.h"
+
+// #define printIIC(args)    Wire.write(args)
+inline size_t LiquidCrystal_I2CRPi::write(unsigned char value) {
     send(value, Rs);
     return 1;
 }
 
-#else
-#include "WProgram.h"
+// #else
+// #include "WProgram.h"
 
-#define printIIC(args)	Wire.send(args)
-inline void LiquidCrystal_I2CRPi::write(unsigned value) {
-	send(value, Rs);
-}
+// #define printIIC(args)	Wire.send(args)
+// inline void LiquidCrystal_I2CRPi::write(unsigned value) {
+// 	send(value, Rs);
+// }
 
-//#endif
-#include "Wire.h"
-*/
+// //#endif
+// #include "Wire.h"
 
 
-inline void LiquidCrystal_I2CRPi::write(unsigned value) {
-    send(value, Rs);
-}
+
+// inline void LiquidCrystal_I2CRPi::write(unsigned value) {
+//     send(value, Rs);
+// }
 
 // When the display powers up, it is configured as follows:
 //

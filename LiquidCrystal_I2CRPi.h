@@ -8,8 +8,9 @@
 
 
 #include <inttypes.h>
-/* original code
- #include "Print.h" //Do not use for now.
+
+ #include "PrintS.h" 
+ /* original code
 #include <Wire.h> //Replace with pigpiod library.
 */
 //modidied
@@ -69,7 +70,7 @@
 //modified end
 
 //original//class LiquidCrystal_I2C : public Print {
-class LiquidCrystal_I2CRPi{
+class LiquidCrystal_I2CRPi: public Print{
 public:
         LiquidCrystal_I2CRPi(int pi,unsigned i2c_bus,unsigned lcd_Addr,unsigned i2c_flags,unsigned lcd_cols,unsigned lcd_rows);
 //    LiquidCrystal_I2CRPi(int pi,unsigned i2c_bus,unsigned lcd_Addr,unsigned i2c_flags,unsigned lcd_cols,unsigned lcd_rows)
@@ -108,9 +109,9 @@ public:
   //void createChar(unsigned, unsigned[]);
   void setCursor(unsigned, unsigned);
 //#if defined(ARDUINO) && ARDUINO >= 100
-//  virtual size_t write(unsigned);
+  virtual size_t write(unsigned char);
 //#else
-  virtual void write(unsigned);
+//  virtual void write(unsigned);
 //#endif
   void command(unsigned);
   void init();

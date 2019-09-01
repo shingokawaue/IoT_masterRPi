@@ -29,24 +29,34 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#include "Arduino.h"
+//#include "Arduino.h"
 
-#include "Print.h"
-
+#include "PrintS.h"
+#include <iostream>
+using namespace std;
 // Public Methods //////////////////////////////////////////////////////////////
 
 /* default implementation: may be overridden */
-size_t Print::write(const unsigned *buffer, size_t size)
+size_t Print::write(const unsigned char *buffer, size_t size)
 {
   size_t n = 0;
+
+  for (int i = 0;i < size;i++)
+  cout << buffer[i] << ':';
+  cout << endl;
+  //825307441:825307441:65585:0:0:90052:0:
   while (size--) {
-    if (write(*buffer++)) n++;//理解が怪しい
+    if (write(*buffer++)) {
+      n++;
+      
+    }
     else break;
   }
   return n;
 }
 
-size_t Print::print(const __FlashStringHelper *ifsh)
+/* do not use
+size_t Print::print(const __FlashStringHelper *ifsh)//多分使わない
 {
   //reinterpret_cast ポインタ型を他のポインタ型に強制的に変換
   //安全かどうかは考慮されない。
@@ -61,13 +71,19 @@ size_t Print::print(const __FlashStringHelper *ifsh)
   }
   return n;//書き込んだサイズ
 }
+*/
 
-size_t Print::print(const String &s)//String
-{
-  return write(s.c_str(), s.length());
-}
+// size_t Print::print(const String &s)//String
+// {
+//   return write(s.c_str(), s.length());
+// }
 
-size_t Print::print(const char str[])
+// size_t Print::print(const char str[])
+// {
+//   return write(str);
+// }
+
+size_t Print::print(const char *str)//add
 {
   return write(str);
 }
@@ -77,17 +93,17 @@ size_t Print::print(char c)
   return write(c);
 }
 
-size_t Print::print(unsigned char b, int base)//どういう風に使われるのかわかりません
+size_t Print::print(unsigned char b, int base)
 {
-  return print((unsigned long) b, base);//謎キャスト
+  return print((unsigned long) b, base);
 }
 
-size_t Print::print(int n, int base)//どういう風に使われるのかわかりません
+size_t Print::print(int n, int base)
 {
   return print((long) n, base);
 }
 
-size_t Print::print(unsigned int n, int base)//どういう風に使われるのかわかりません
+size_t Print::print(unsigned int n, int base)
 {
   return print((unsigned long) n, base);
 }
@@ -119,12 +135,14 @@ size_t Print::print(double n, int digits)
   return printFloat(n, digits);
 }
 
+/*
 size_t Print::println(const __FlashStringHelper *ifsh)
 {
   size_t n = print(ifsh);
   n += println();
   return n;
 }
+*/
 
 size_t Print::print(const Printable& x)
 {
@@ -136,12 +154,12 @@ size_t Print::println(void)
   return write("\r\n");
 }
 
-size_t Print::println(const String &s)
-{
-  size_t n = print(s);
-  n += println();
-  return n;
-}
+// size_t Print::println(const String &s)
+// {
+//   size_t n = print(s);
+//   n += println();
+//   return n;
+// }
 
 size_t Print::println(const char c[])
 {
@@ -209,7 +227,7 @@ size_t Print::println(const Printable& x)
 // Private Methods /////////////////////////////////////////////////////////////
 
 //n:some number   base:2進数で表示したいなら２　１６進数なら１６
-size_t Print::printNumber(unsigned long n, unsigned base)
+size_t Print::printNumber(unsigned long n, unsigned base){
   char buf[8 * sizeof(long) + 1]; // Assumes 8-bit chars plus zero byte.
   char *str = &buf[sizeof(buf) - 1];
 

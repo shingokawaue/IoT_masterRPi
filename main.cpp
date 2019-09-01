@@ -46,21 +46,9 @@ int main()
     lcd.init();
     lcd.backlight();
     lcd.setCursor(2, 0);
-    lcd.write('H');
-    lcd.write('e');
-    lcd.write('l');
-    lcd.write('l');
-    lcd.write('o');
-    lcd.write('!');
-    lcd.write('!');
-    lcd.write('W');
-    lcd.write('o');
-    lcd.write('r');
-    lcd.write('l');
-    lcd.write('d');
-    lcd.write('!');
-    lcd.write('!');
-    lcd.write('!');
+    const char cc[10] = "Bye!!";
+    lcd.print(cc);
+    lcd.print("tes");
     
     
     while (1)
