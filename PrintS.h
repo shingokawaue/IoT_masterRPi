@@ -1,3 +1,9 @@
+//based on Arduino Library
+//ported to standard C++ for raspberry pi
+
+//All uint8_t are replased with unsigned.
+
+
 /*
   Print.h - Base class that provides print() and println()
   Copyright (c) 2008 David A. Mellis.  All right reserved.
@@ -23,7 +29,8 @@
 #include <inttypes.h>
 #include <stdio.h> // for size_t
 
-#include "WString.h"
+//#include "WString.h"
+#include <string.h>
 #include "Printable.h"
 
 #define DEC 10
@@ -38,8 +45,8 @@ class Print
 {
   private:
     int write_error;
-    size_t printNumber(unsigned long, uint8_t);
-    size_t printFloat(double, uint8_t);
+    size_t printNumber(unsigned long, unsigned);
+    size_t printFloat(double, unsigned);
   protected:
     void setWriteError(int err = 1) { write_error = err; }
   public:
@@ -48,23 +55,26 @@ class Print
     int getWriteError() { return write_error; }
     void clearWriteError() { setWriteError(0); }
   
-    virtual size_t write(uint8_t) = 0;
-    size_t write(const char *str) {
+    virtual size_t write(unsigned char) = 0;//継承先でオーバーライドしないと使えないよ
+
+    size_t write(const char *str) {//const char 引数に使えるぜオーバーロード
       if (str == NULL) return 0;
-      return write((const uint8_t *)str, strlen(str));
+      return write((const unsigned char*)str, strlen(str));
     }
-    virtual size_t write(const uint8_t *buffer, size_t size);
+
+    virtual size_t write(const unsigned char *buffer, size_t size);
     size_t write(const char *buffer, size_t size) {
-      return write((const uint8_t *)buffer, size);
+      return write((const unsigned char*)buffer, size);
     }
 
     // default to zero, meaning "a single write may block"
     // should be overriden by subclasses with buffering
     virtual int availableForWrite() { return 0; }
 
-    size_t print(const __FlashStringHelper *);
-    size_t print(const String &);
-    size_t print(const char[]);
+    //size_t print(const __FlashStringHelper *);
+    //size_t print(const String &);
+    //size_t print(const char[]);
+    size_t print(const char*);//add
     size_t print(char);
     size_t print(unsigned char, int = DEC);
     size_t print(int, int = DEC);
@@ -74,8 +84,8 @@ class Print
     size_t print(double, int = 2);
     size_t print(const Printable&);
 
-    size_t println(const __FlashStringHelper *);
-    size_t println(const String &s);
+    //size_t println(const __FlashStringHelper *);
+    //size_t println(const String &s);
     size_t println(const char[]);
     size_t println(char);
     size_t println(unsigned char, int = DEC);
