@@ -64,9 +64,9 @@ bool BME280I2C::WriteRegister
 /****************************************************************/
 bool BME280I2C::ReadRegister
 (
-  uint8_t addr,
+  uint8_t addr,//BME280のレジスタのアドレス
   uint8_t data[],
-  uint8_t length
+  uint8_t length//BME280のレジスタの範囲（データのビット数）
 )
 {
   uint8_t ord(0);
@@ -80,6 +80,9 @@ bool BME280I2C::ReadRegister
   //→ <iom328p.h>etc..  #define TWCR _SFR_MEM8(0xBC)
   //→　avr/#define _SFR_MEM8(mem_addr) (mem_addr)
 
+
+
+//RPIでWireのBufferIndexとBufferLengthに当たるものがなんなのか調べないといけない
   while(Wire.available())//問題個所
   {
     data[ord++] = Wire.read();

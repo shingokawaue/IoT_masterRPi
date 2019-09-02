@@ -8,10 +8,14 @@ using namespace std;
 #include "LiquidCrystal_I2CRPi.h"
 #define LED_PIN 5
 #define LED_PIN2 10
+#define BME280_ADDR 0x76//tes
 
 int pi = pigpio_start(0,0);
 MyNetSerialRPi mynet(pi,MCID_MASTER_RPI);
 LiquidCrystal_I2CRPi lcd(pi,1,0x25,0,16,2);
+
+int bmehandle;//tes
+
 //argument :ID of the data array(mydata) to be displayed
 void dataToMe(SerialDataRPi *sd)
 {
@@ -41,6 +45,7 @@ int main()
     set_mode(pi, LED_PIN, PI_OUTPUT);
     set_mode(pi, LED_PIN2, PI_OUTPUT);
     char wc[1];
+bmehandle = i2c_open(pi,1,BME280_ADDR,0);//tes
 
     
     lcd.init();
