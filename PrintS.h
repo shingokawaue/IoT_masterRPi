@@ -1,7 +1,7 @@
 //based on Arduino Library
 //ported to standard C++ for raspberry pi
 
-//All uint8_t are replased with unsigned.
+//All uint8_t are replaced with unsigned char.
 
 
 /*

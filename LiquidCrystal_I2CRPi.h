@@ -1,5 +1,5 @@
 //Arduino LCD library ported to linux on raspberry pi.
-//All unsigned are replaced with unsigned.
+//All uint8_t are replaced with unsigned char.
 
 //YWROBOT
 #ifndef LiquidCrystal_I2C_RPI_h

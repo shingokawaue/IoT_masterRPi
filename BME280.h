@@ -1,5 +1,5 @@
 //Based on Tyler Glenn's library for Arduino.
-
+//All unsigned char are replaced with unsigned char.
 /*
 
 BME280.h
@@ -192,7 +192,7 @@ struct Settings {
 
    ////////////////////////////////////////////////////////////////
    /// Method used to return CHIP_ID.
-   uint8_t chipID();
+   unsigned char chipID();
 
    ////////////////////////////////////////////////////////////////
    /// Method used to return ChipModel.
@@ -213,11 +213,11 @@ protected:
 /* ACCESS FUNCTIONS                                              */
 /*****************************************************************/
 
-//uint8_t&  getMode();
-//uint8_t*  getDig();
-//uint8_t&  getControlHumidity();
-//uint8_t&  getControlMeasure();
-//uint8_t&  getConfig();
+//unsigned char&  getMode();
+//unsigned char*  getDig();
+//unsigned char&  getControlHumidity();
+//unsigned char&  getControlMeasure();
+//unsigned char&  getConfig();
 
 
 private:
@@ -226,32 +226,32 @@ private:
 /* CONSTANTS                                                     */
 /*****************************************************************/
 
-   static const uint8_t CTRL_HUM_ADDR   = 0xF2;
-   static const uint8_t CTRL_MEAS_ADDR  = 0xF4;
-   static const uint8_t CONFIG_ADDR     = 0xF5;
-   static const uint8_t PRESS_ADDR      = 0xF7;
-   static const uint8_t TEMP_ADDR       = 0xFA;
-   static const uint8_t HUM_ADDR        = 0xFD;
-   static const uint8_t TEMP_DIG_ADDR   = 0x88;
-   static const uint8_t PRESS_DIG_ADDR  = 0x8E;
-   static const uint8_t HUM_DIG_ADDR1   = 0xA1;
-   static const uint8_t HUM_DIG_ADDR2   = 0xE1;
-   static const uint8_t ID_ADDR         = 0xD0;
+   static const unsigned char CTRL_HUM_ADDR   = 0xF2;
+   static const unsigned char CTRL_MEAS_ADDR  = 0xF4;
+   static const unsigned char CONFIG_ADDR     = 0xF5;
+   static const unsigned char PRESS_ADDR      = 0xF7;
+   static const unsigned char TEMP_ADDR       = 0xFA;
+   static const unsigned char HUM_ADDR        = 0xFD;
+   static const unsigned char TEMP_DIG_ADDR   = 0x88;
+   static const unsigned char PRESS_DIG_ADDR  = 0x8E;
+   static const unsigned char HUM_DIG_ADDR1   = 0xA1;
+   static const unsigned char HUM_DIG_ADDR2   = 0xE1;
+   static const unsigned char ID_ADDR         = 0xD0;
 
-   static const uint8_t TEMP_DIG_LENGTH         = 6;
-   static const uint8_t PRESS_DIG_LENGTH        = 18;
-   static const uint8_t HUM_DIG_ADDR1_LENGTH    = 1;
-   static const uint8_t HUM_DIG_ADDR2_LENGTH    = 7;
-   static const uint8_t DIG_LENGTH              = 32;
-   static const uint8_t SENSOR_DATA_LENGTH      = 8;
+   static const unsigned char TEMP_DIG_LENGTH         = 6;
+   static const unsigned char PRESS_DIG_LENGTH        = 18;
+   static const unsigned char HUM_DIG_ADDR1_LENGTH    = 1;
+   static const unsigned char HUM_DIG_ADDR2_LENGTH    = 7;
+   static const unsigned char DIG_LENGTH              = 32;
+   static const unsigned char SENSOR_DATA_LENGTH      = 8;
 
 /*****************************************************************/
 /* VARIABLES                                                     */
 /*****************************************************************/
    Settings m_settings;
 
-   uint8_t m_dig[32];
-   uint8_t m_chip_id;
+   unsigned char m_dig[32];
+   unsigned char m_chip_id;
    ChipModel m_chip_model;
 
 
@@ -264,15 +264,15 @@ private:
    /////////////////////////////////////////////////////////////////
    /// Write values to BME280 registers.
    virtual bool WriteRegister(
-      uint8_t addr,
-      uint8_t data)=0;
+      unsigned char addr,
+      unsigned char data)=0;
 
    /////////////////////////////////////////////////////////////////
    /// Read values from BME280 registers.
    virtual bool ReadRegister(
-      uint8_t addr,
-      uint8_t data[],
-      uint8_t length)=0;
+      unsigned char addr,
+      unsigned char data[],
+      unsigned char length)=0;
 
 
 
@@ -283,9 +283,9 @@ private:
    /////////////////////////////////////////////////////////////////
    /// Calculates registers based on settings.
    void CalculateRegisters(
-      uint8_t& ctrlHum,
-      uint8_t& ctrlMeas,
-      uint8_t& config);
+      unsigned char& ctrlHum,
+      unsigned char& ctrlMeas,
+      unsigned char& config);
 
    /////////////////////////////////////////////////////////////////
    /// Write the settings to the chip.
