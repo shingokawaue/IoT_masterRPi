@@ -71,13 +71,16 @@ bool BME280I2C::ReadRegister
 {
   uint8_t ord(0);
 
-  Wire.beginTransmission(m_bme_280_addr);
-  Wire.write(addr);
-  Wire.endTransmission();
+  Wire.beginTransmission(m_bme_280_addr);//i2c_open()
+  Wire.write(addr);//i2c_write_byte
+  Wire.endTransmission();//i2c_close
 
-  Wire.requestFrom(m_bme_280_addr, length);
+  Wire.requestFrom(m_bme_280_addr, length);//→Wire.cpp twi_readFrom(,,,)
+  //→twi.c TWCR TWBR TWAR....   →<avr/io.h> 
+  //→ <iom328p.h>etc..  #define TWCR _SFR_MEM8(0xBC)
+  //→　avr/#define _SFR_MEM8(mem_addr) (mem_addr)
 
-  while(Wire.available())
+  while(Wire.available())//問題個所
   {
     data[ord++] = Wire.read();
   }
